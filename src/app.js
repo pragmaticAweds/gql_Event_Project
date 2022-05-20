@@ -1,4 +1,5 @@
 const { ApolloServer } = require("apollo-server");
+
 const typeDefs = require("./components/component-schema");
 const resolvers = require("./components/component-resolver");
 

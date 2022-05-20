@@ -13,7 +13,6 @@ module.exports = gql`
     title: String!
     description: String!
     price: Float!
-    date: String!
   }
 
   type Mutation {

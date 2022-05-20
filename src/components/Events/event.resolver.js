@@ -1,34 +1,33 @@
-const events = [
-  {
-    id: "400382",
-    title: "Shawama Night",
-    description: "fun, coool and exciting",
-    price: 99.9,
-    date: "Thu May 19 2022",
-  },
-];
+const Event = require("./event.model");
+
+const { consoleLog } = require("../../utils/helper-function");
+
+const { eventDataConverter } = require("./event.utilities");
 
 module.exports.eventResolverTypes = {
-  allEvents: () => events,
+  allEvents: async () => {
+    return (await Event.find({})).map((event) => eventDataConverter(event));
+  },
 };
 
 module.exports.eventResolverMutationTypes = {
-  addEvent: (_, args) => {
+  addEvent: async (_, args) => {
     const {
       eventInput: { title, description, price },
     } = args;
-    const id = Math.random().toString().substring(2, 8);
-    const newDate = new Date().toDateString();
+    let newEvent;
 
-    const newEvent = {
-      id,
-      title,
-      description,
-      price: +price,
-      date: newDate,
-    };
-    console.log({ newEvent });
-    events.push(newEvent);
-    return newEvent;
+    try {
+      newEvent = await new Event({
+        title,
+        description,
+        price: +price,
+        date: new Date().toISOString(),
+      }).save();
+
+      return eventDataConverter(newEvent);
+    } catch (err) {
+      consoleLog(err.message, true);
+    }
   },
 };

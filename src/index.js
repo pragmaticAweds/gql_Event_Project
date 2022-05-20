@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const server = require("./app");
+const { DB_URI } = require("./utils/config");
 
-// mongoose.connect();
-// console.log();
+mongoose
+  .connect(DB_URI)
+  .then(() => console.log(`connected to server successfully`));
 
 server
   .listen()
-  .then(({ port }) => console.log(`server running on PORT :::> ${port}`));
+  .then(({ port }) => console.log(`server running on PORT => ${port}`));
