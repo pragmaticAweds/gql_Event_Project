@@ -16,7 +16,7 @@ const userSchema = new Schema({
   createdEvents: [
     {
       type: Types.ObjectId,
-      ref: "event",
+      ref: "Event",
     },
   ],
 });

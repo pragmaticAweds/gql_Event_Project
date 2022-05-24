@@ -1,13 +1,14 @@
 const { gql } = require("apollo-server");
+// const eventTypes = require("../Events/event.schema");
 
 module.exports = gql`
   type User {
     id: ID!
     name: String!
     email: String!
+    createdEvents: [Event]
     password: String
   }
-
   input UserInput {
     name: String!
     email: String!
@@ -15,6 +16,6 @@ module.exports = gql`
   }
 
   type Mutation {
-    doSignUp(userInput: UserInput): User
+    doSignUp(userInput: UserInput!): User
   }
 `;

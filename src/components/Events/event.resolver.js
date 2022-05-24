@@ -1,8 +1,10 @@
 const Event = require("./event.model");
 
 const { consoleLog } = require("../../utils/helper-function");
+const User = require("../Users/user.model");
 
 const { eventDataConverter } = require("./event.utilities");
+const { UserInputError } = require("apollo-server-express");
 
 module.exports.eventResolverTypes = {
   allEvents: async () => {
@@ -18,16 +20,27 @@ module.exports.eventResolverMutationTypes = {
     let newEvent;
 
     try {
-      newEvent = await new Event({
+      const user = await User.findById("628d36e8758e3d1b8b72ade5");
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      newEvent = new Event({
         title,
         description,
         price: +price,
         date: new Date().toISOString(),
-      }).save();
+        creator: "628d36e8758e3d1b8b72ade5",
+      });
 
+      user.createdEvents.push(newEvent);
+      await user.save();
+
+      await newEvent.save();
       return eventDataConverter(newEvent);
     } catch (err) {
-      consoleLog(err.message, true);
+      throw new UserInputError(err.message);
     }
   },
 };

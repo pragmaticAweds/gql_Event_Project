@@ -1,5 +1,5 @@
 const { environment } = require("./config");
-const { hashSync } = require("bcryptjs");
+const { hashSync, compareSync } = require("bcryptjs");
 
 module.exports.consoleLog = (msg, forced = false) => {
   if (forced === true) {

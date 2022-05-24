@@ -1,4 +1,5 @@
 const { gql } = require("apollo-server");
+const userType = require("../Users/user.schema");
 
 module.exports = gql`
   type Event {
@@ -7,6 +8,7 @@ module.exports = gql`
     description: String!
     price: Float!
     date: String!
+    creator: User
   }
 
   input EventInput {
@@ -16,6 +18,7 @@ module.exports = gql`
   }
 
   type Mutation {
-    addEvent(eventInput: EventInput): Event!
+    addEvent(eventInput: EventInput!): Event
   }
+  ${userType}
 `;
