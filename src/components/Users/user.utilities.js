@@ -1,22 +1,6 @@
 const User = require("./user.model");
 const Event = require("../Events/event.model");
 
-const findingUser = async (userId) => {
-  const foundUser = await User.findById(userId);
-  return userDataConverter(foundUser);
-};
-
-const findingEvents = async (eventIds) => {
-  return (await Event.find({ _id: { $in: eventIds } })).map((event) => {
-    return {
-      ...event._doc,
-      id: event.id.toString(),
-      date: event.date.toLocaleString(),
-      creator: findingUser.bind(this, event.creator),
-    };
-  });
-};
-
 const userDataConverter = (user) => {
   return {
     ...user._doc,
@@ -24,6 +8,35 @@ const userDataConverter = (user) => {
     password: null,
     createdEvents: findingEvents.bind(this, user.createdEvents),
   };
+};
+
+const findingUser = async (userId) => {
+  let foundUser;
+  try {
+    foundUser = await User.findById(userId);
+  } catch (err) {
+    throw err;
+  }
+
+  return userDataConverter(foundUser);
+};
+
+const findingEvents = async (eventIds) => {
+  let foundEvents;
+  try {
+    foundEvents = await Event.find({ _id: { $in: eventIds } });
+  } catch (err) {
+    throw err;
+  }
+
+  return foundEvents.map((event) => {
+    return {
+      ...event._doc,
+      id: event.id.toString(),
+      date: event.date.toLocaleString(),
+      creator: findingUser.bind(this, event.creator),
+    };
+  });
 };
 
 module.exports = { userDataConverter, findingUser, findingEvents };

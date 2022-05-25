@@ -1,6 +1,5 @@
 const Event = require("./event.model");
 
-const { consoleLog } = require("../../utils/helper-function");
 const User = require("../Users/user.model");
 
 const { eventDataConverter } = require("./event.utilities");
@@ -8,7 +7,11 @@ const { UserInputError } = require("apollo-server-express");
 
 module.exports.eventResolverTypes = {
   allEvents: async () => {
-    return (await Event.find({})).map((event) => eventDataConverter(event));
+    try {
+      return (await Event.find({})).map((event) => eventDataConverter(event));
+    } catch (err) {
+      throw new UserInputError(err.message);
+    }
   },
 };
 
