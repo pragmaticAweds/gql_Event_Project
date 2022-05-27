@@ -6,9 +6,14 @@ const { eventDataConverter } = require("./event.utilities");
 const { UserInputError } = require("apollo-server-express");
 
 module.exports.eventResolverTypes = {
-  allEvents: async () => {
+  allEvents: async (_, args, { isLoggedIn }) => {
+    if (!isLoggedIn) {
+      throw Error("User must be logged in");
+    }
+
     try {
-      return (await Event.find({})).map((event) => eventDataConverter(event));
+      const events = await Event.find({});
+      return events.map((event) => eventDataConverter(event));
     } catch (err) {
       throw new UserInputError(err.message);
     }
@@ -16,25 +21,28 @@ module.exports.eventResolverTypes = {
 };
 
 module.exports.eventResolverMutationTypes = {
-  addEvent: async (_, args) => {
+  addEvent: async (_, args, { isLoggedIn }) => {
     const {
       eventInput: { title, description, price },
     } = args;
-    let newEvent;
+
+    if (!isLoggedIn) {
+      throw Error("User must be logged in");
+    }
 
     try {
-      const user = await User.findById("628d36e8758e3d1b8b72ade5");
+      const user = await User.findById(isLoggedIn._id);
 
       if (!user) {
         throw new Error("User not found");
       }
 
-      newEvent = new Event({
+      const newEvent = new Event({
         title,
         description,
         price: +price,
         date: new Date().toISOString(),
-        creator: "628d36e8758e3d1b8b72ade5",
+        creator: user.id,
       });
 
       user.createdEvents.push(newEvent);

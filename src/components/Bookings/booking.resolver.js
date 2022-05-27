@@ -1,20 +1,54 @@
 const Booking = require("./booking.model");
+const Event = require("../Events/event.model");
 
-module.exports = {
-  allBookingss: async () => {
-    let bookings;
+const { bookingDataConverter } = require("./booking.utils");
+const { findingSingleEvent } = require("../Events/event.utilities");
+
+
+module.exports.bookingResolverType = {
+  allBookings: async (_, args, { isLoggedIn }) => {
+    if (!isLoggedIn) {
+      throw Error("User must be logged in");
+    }
     try {
-      bookings = await Booking.find({});
+      const bookings = await Booking.find({});
+      return bookings.map((booking) => bookingDataConverter(booking));
     } catch (err) {
       throw err;
     }
-    return bookings.map((booking) => {
-      return {
-        ...booking._doc,
-        id: booking.id.toString(),
-        createdAt: booking.createdAt.toLocaleString(),
-        updatedAt: booking.updatedAt.toLocalString(),
-      };
-    });
+  },
+};
+
+module.exports.bookingMutationResolverType = {
+  addBooking: async (_, args, { isLoggedIn }) => {
+    if (!isLoggedIn) {
+      throw Error("User must be logged in");
+    }
+    const findEvent = await Event.findById({ _id: args.eventId });
+    try {
+      const newBooking = new Booking({
+        user: isLoggedIn._id,
+        event: findEvent,
+      });
+
+      await newBooking.save();
+
+      return bookingDataConverter(newBooking);
+    } catch (err) {
+      throw err;
+    }
+  },
+  cancelBooking: async (_, args, { isLoggedIn }) => {
+    if (!isLoggedIn) {
+      throw Error("User must be logged in");
+    }
+    try {
+      const foundBooking = await Booking.findById(args.bookingId);
+      const event = findingSingleEvent(foundBooking.event);
+      await Booking.deleteOne({ id: foundBooking.id });
+      return event;
+    } catch (err) {
+      throw err;
+    }
   },
 };

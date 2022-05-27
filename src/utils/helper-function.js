@@ -1,5 +1,4 @@
 const { environment } = require("./config");
-const { hashSync, compareSync } = require("bcryptjs");
 
 module.exports.consoleLog = (msg, forced = false) => {
   if (forced === true) {
@@ -9,4 +8,4 @@ module.exports.consoleLog = (msg, forced = false) => {
   }
 };
 
-module.exports.hashPassword = (password) => hashSync(password, 12);
+exports.dateToString = (date) => new Date(date).toLocaleString();

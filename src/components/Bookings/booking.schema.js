@@ -10,12 +10,10 @@ module.exports = gql`
     createdAt: String!
     updatedAt: String!
   }
-
   type Mutation {
     addBooking(eventId: ID!): Booking!
-    cancelBooking(bookingId: ID!) Event!
+    cancelBooking(bookingId: ID!): Event!
   }
-
-  ${eventType}
   ${userType}
+  ${eventType}
 `;

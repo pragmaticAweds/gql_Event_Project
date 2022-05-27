@@ -18,7 +18,7 @@ module.exports = gql`
   }
 
   type Mutation {
-    addEvent(eventInput: EventInput!): Event
+    addEvent(eventInput: EventInput!): Event!
   }
   ${userType}
 `;

@@ -1,6 +1,8 @@
 const eventType = require("./Events/event.schema");
 const { gql } = require("apollo-server");
 const usersSchema = require("../components/Users/user.schema");
+const bookingSchema = require("../components/Bookings/booking.schema");
+const authSchema = require("../components/Auth/auth.schema");
 
 module.exports = gql`
   type Query {
@@ -10,9 +12,12 @@ module.exports = gql`
   }
 
   type Mutation {
-    addEvent: Event
-    addBooking: Booking
+    addEvent: Event!
+    addBooking: Booking!
+    doSignUp: User!
   }
   ${usersSchema}
   ${eventType}
+  ${bookingSchema}
+  ${authSchema}
 `;
