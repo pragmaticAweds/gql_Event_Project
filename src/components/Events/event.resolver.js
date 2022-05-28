@@ -8,7 +8,7 @@ const { UserInputError } = require("apollo-server-express");
 module.exports.eventResolverTypes = {
   allEvents: async (_, args, { isLoggedIn }) => {
     if (!isLoggedIn) {
-      throw Error("User must be logged in");
+      throw Error("Authentication is required");
     }
 
     try {
@@ -27,7 +27,7 @@ module.exports.eventResolverMutationTypes = {
     } = args;
 
     if (!isLoggedIn) {
-      throw Error("User must be logged in");
+      throw Error("Authentication is required");
     }
 
     try {

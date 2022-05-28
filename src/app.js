@@ -5,14 +5,14 @@ const resolvers = require("./components/component-resolver");
 const { decodeToken } = require("./components/Auth/auth.utils");
 
 const User = require("./components/Users/user.model");
-const { consoleLog } = require("./utils/helper-function");
-const { validateToken } = require("./components/Auth/auth.middleware");
+
+const { validateAuth } = require("./components/Auth/auth.middleware");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-    return validateToken(req);
+    return validateAuth(req);
   },
 });
 

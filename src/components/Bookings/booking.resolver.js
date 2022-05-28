@@ -4,11 +4,10 @@ const Event = require("../Events/event.model");
 const { bookingDataConverter } = require("./booking.utils");
 const { findingSingleEvent } = require("../Events/event.utilities");
 
-
 module.exports.bookingResolverType = {
   allBookings: async (_, args, { isLoggedIn }) => {
     if (!isLoggedIn) {
-      throw Error("User must be logged in");
+      throw Error("Authentication is required");
     }
     try {
       const bookings = await Booking.find({});
@@ -22,7 +21,7 @@ module.exports.bookingResolverType = {
 module.exports.bookingMutationResolverType = {
   addBooking: async (_, args, { isLoggedIn }) => {
     if (!isLoggedIn) {
-      throw Error("User must be logged in");
+      throw Error("Authentication is required");
     }
     const findEvent = await Event.findById({ _id: args.eventId });
     try {
@@ -40,7 +39,7 @@ module.exports.bookingMutationResolverType = {
   },
   cancelBooking: async (_, args, { isLoggedIn }) => {
     if (!isLoggedIn) {
-      throw Error("User must be logged in");
+      throw Error("Authentication is required");
     }
     try {
       const foundBooking = await Booking.findById(args.bookingId);

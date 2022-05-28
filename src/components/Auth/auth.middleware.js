@@ -1,7 +1,7 @@
 const User = require("../Users/user.model");
 const { decodeToken } = require("./auth.utils");
 
-exports.validateToken = async (req) => {
+exports.validateAuth = async (req) => {
   try {
     const auth = req ? req.headers.authorization : null;
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
