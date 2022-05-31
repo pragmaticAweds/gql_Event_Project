@@ -1,0 +1,20 @@
+.header {
+  @apply bg-[#01d1d1] w-full h-14 flex justify-around items-center py-0 px-4;
+}
+
+.logo > h1 {
+  @apply text-2xl font-bold;
+}
+
+nav {
+  @apply space-x-4;
+}
+
+a,
+.links > button {
+  @apply font-bold p-2 mx-2 hover:bg-red-600 hover:text-white;
+}
+
+a.active {
+  @apply text-white;
+}

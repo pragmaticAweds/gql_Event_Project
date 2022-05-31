@@ -1,0 +1,18 @@
+.modal {
+  @apply bg-white w-[90%] shadow-[0_2px_8px] shadow-[rgba(0,0,0,0.20)] fixed top-[20vh] left-[5%] md:w-[30rem] md:left-[calc((100%-30rem)/2)];
+}
+
+.modal-header {
+  @apply p-4 bg-[#5101d1] text-white;
+}
+
+.modal-header h1 {
+  @apply m-0 text-xl;
+}
+
+.content {
+  @apply p-4;
+}
+.actions {
+  @apply flex justify-end p-4;
+}
