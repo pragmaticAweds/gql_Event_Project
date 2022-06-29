@@ -14,7 +14,7 @@ const SIGNUP_QUERY = gql`
 
 const SignUpScreen = () => {
   const navigate = useNavigate();
-  const [signUpFunc, { loading, data }] = useMutation(SIGNUP_QUERY, {
+  const [signUpFunc] = useMutation(SIGNUP_QUERY, {
     onError: (err) => {
       console.log(err.message);
     },

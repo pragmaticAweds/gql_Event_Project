@@ -23,13 +23,14 @@ const LoginScreen = () => {
 
   const auth = useContext(authContext);
 
-  const [loginfunc, { loading, data }] = useMutation(LOGIN_QUERY, {
+  const [loginfunc] = useMutation(LOGIN_QUERY, {
     onError: (err) => {
       console.log(err.message);
     },
     onCompleted: ({ doLogin: { token, userId, tokenExpires } }) => {
       auth.login(token, userId, tokenExpires);
       setAuthToken(token);
+      localStorage.setItem("loginToken", token);
     },
   });
 
@@ -56,8 +57,8 @@ const LoginScreen = () => {
           <input type="password" id="password" name="password" />
         </div>
         <div className="btn-control">
-          <Button title="SignUp" onClick={() => navigate("/auth/signup")} />
           <Button title="Submit" />
+          <Button title="SignUp" onClick={() => navigate("/auth/signup")} />
         </div>
       </form>
     </ScreenTemplate>

@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export default createContext<{
-  token?: string;
+  token?: string | null;
   userId?: string;
   login: (token?: string, userId?: string, expiresIn?: number) => void;
   logout?: () => void;

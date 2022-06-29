@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import App from "./components/App";
 import LoginScreen from "./components/pages/auth-screens/login-screen";
@@ -9,10 +9,15 @@ import AuthContext from "./context/auth-context";
 
 const AppRouter = () => {
   const [authState, setAuthState] = useState<{
-    token?: string;
+    token?: string | null;
     userId?: string;
     expiresIn?: number;
   }>({ token: "", userId: "", expiresIn: 0 });
+
+  useEffect(() => {
+    let token = localStorage.getItem("loginToken");
+    setAuthState({ ...authState, token });
+  }, []);
 
   const login = (token?: string, userId?: string, expiresIn?: number) => {
     setAuthState({ ...authState, token, userId, expiresIn });
@@ -20,6 +25,7 @@ const AppRouter = () => {
 
   const logout = () => {
     setAuthState({ ...authState, token: "", userId: "" });
+    localStorage.clear();
   };
   return (
     <AuthContext.Provider
@@ -37,6 +43,13 @@ const AppRouter = () => {
             element={<Navigate replace to="/auth/login" />}
           />
         )}
+
+        {/* {!authState.token && (
+          <Route
+            path="/events"
+            element={<Navigate replace to="/auth/login" />}
+          />
+        )} */}
 
         {authState.token && (
           <Route
